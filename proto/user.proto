@@ -1,0 +1,43 @@
+syntax="proto3";
+
+// Nome do pacote
+package pb;
+
+//Geração do pacote para Go
+option  go_package = "./;pb";
+
+message User{
+    string id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message UserResultStream {
+	string status = 1;
+	User user = 2;
+}
+
+message Users {
+    repeated User user = 1;
+}
+
+// Serviço para adicionar um usuário
+service UserService {
+
+    //Client/Server
+    rpc AddUser (User) 
+        returns (User);
+
+    // Server Stream
+    rpc AddUserVerbose (User)
+        returns (stream UserResultStream);
+
+    // Client Stream
+    rpc AddUsers (stream User)
+        returns (Users);
+    
+    // Stream bi-direcional
+    rpc AddUsersStreamBoth (stream User) 
+        returns (stream UserResultStream);
+}
+
